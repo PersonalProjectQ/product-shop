@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Repositories\Exceptions\Repository;
+namespace App\Repositories\Eloquent\Exceptions;
 
 use Exception;
 use Throwable;
 
-class RepositoryExceptionInterface extends Exception
+class ExceptionRepository extends Exception
 {
     /**
-     * RepositoryException handler.
+     * Repository Exception handler.
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
