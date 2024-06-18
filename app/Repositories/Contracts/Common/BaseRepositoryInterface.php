@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contract\Commons;
+namespace App\Repositories\Contracts\Common;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;

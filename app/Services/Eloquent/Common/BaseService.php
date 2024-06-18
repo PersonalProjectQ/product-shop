@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Common\Eloquent;
+namespace App\Services\Eloquent\Common;
 
+use App\Exceptions\ServiceException;
 use App\Services\Contract\Common\BaseServiceInterface;
-use App\Services\Eloquent\Exceptions\ExceptionService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 
-abstract class BaseCrudService implements BaseServiceInterface
+abstract class BaseService implements BaseServiceInterface
 {
     /**
      * @var BaseRepositoryInterface
@@ -19,7 +19,7 @@ abstract class BaseCrudService implements BaseServiceInterface
     protected $repository;
 
     /**
-     * BaseCrudService constructor.
+     * BaseService constructor.
      */
     public function __construct()
     {
@@ -162,12 +162,12 @@ abstract class BaseCrudService implements BaseServiceInterface
      *
      * @param array $data
      * @return Model|null
-     * @throws ExceptionService
+     * @throws ServiceException
      */
     public function create(array $data): ?Model
     {
         if (is_null($model = $this->repository->create($data))) {
-            throw new ExceptionService('Error while creating model');
+            throw new ServiceException('Error while creating model');
         }
 
         return $model;
@@ -189,12 +189,12 @@ abstract class BaseCrudService implements BaseServiceInterface
      *
      * @param array $attributes
      * @return Collection
-     * @throws ExceptionService
+     * @throws ServiceException
      */
     public function createMany(array $attributes): Collection
     {
         if (empty($attributes)) {
-            throw new ExceptionService('Data is empty');
+            throw new ServiceException('Data is empty');
         }
 
         return DB::transaction(function () use ($attributes) {
@@ -214,12 +214,12 @@ abstract class BaseCrudService implements BaseServiceInterface
      * @param array $attributes
      * @param array $data
      * @return Model|null
-     * @throws ExceptionService
+     * @throws ServiceException
      */
     public function updateOrCreate(array $attributes, array $data): ?Model
     {
         if (is_null($model = $this->repository->updateOrCreate($attributes, $data))) {
-            throw new ExceptionService('Error while creating or updating the model');
+            throw new ServiceException('Error while creating or updating the model');
         }
 
         return $model;
@@ -247,7 +247,7 @@ abstract class BaseCrudService implements BaseServiceInterface
     public function delete($keyOrModel): bool
     {
         if (!$this->repository->delete($keyOrModel)) {
-            throw new ExceptionService('Error while deleting model');
+            throw new ServiceException('Error while deleting model');
         }
 
         return true;

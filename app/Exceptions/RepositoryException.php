@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories\Eloquent\Exceptions;
+namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\Response;
 use Throwable;
 
-class ExceptionRepository extends Exception
+class RepositoryException extends Exception
 {
     /**
      * Repository Exception handler.
@@ -13,8 +14,9 @@ class ExceptionRepository extends Exception
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = "Error", $code = 400, Throwable $previous = null)
+    public function __construct($message = "Error", $code = Response::HTTP_BAD_REQUEST, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
+
 }

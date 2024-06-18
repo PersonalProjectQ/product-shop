@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Eloquent\Common;
 
-use App\Repositories\Contract\Commons\BaseRepositoryInterface;
-use App\Repositories\Eloquent\Exceptions\ExceptionRepository;
+use App\Exceptions\RepositoryException;
+use App\Repositories\Contracts\Common\BaseRepositoryInterface;
 use App\Traits\CrudAble;
 use App\Traits\Queryable;
 use Illuminate\Database\Eloquent\Model;
@@ -19,14 +19,14 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @param $keyOrModel
      * @return Model
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function resolveModel($keyOrModel): Model
     {
         if ($keyOrModel instanceof Model) {
             $modelClass = $this->getModelClass();
             if (!$keyOrModel instanceof $modelClass) {
-                throw new ExceptionRepository("Model is not an entity of repository model class");
+                throw new RepositoryException("Model is not an entity of repository model class");
             }
             return $keyOrModel;
         }
