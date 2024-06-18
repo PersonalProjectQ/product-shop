@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use App\Repositories\Contract\Commons\BaseRepositoryInterface;
-use App\Repositories\Eloquent\Exceptions\ExceptionRepository;
+use App\Exceptions\RepositoryException;
+use App\Repositories\Contracts\Common\BaseRepositoryInterface;
 use Closure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\LazyCollection;
 
-trait Queryable
+trait QueryAble
 {
     /**
      * Handle soft deletes
@@ -79,7 +79,7 @@ trait Queryable
      * @param $value
      * @param string|null $column
      * @return Model
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function findOrFail($value, ?string $column = null): Model
     {
@@ -97,7 +97,7 @@ trait Queryable
      *
      * @param array $attributes
      * @return Collection
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function findMany(array $attributes): Collection
     {
@@ -109,7 +109,7 @@ trait Queryable
      *
      * @param array $attributes
      * @return Model|null
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function findFirst(array $attributes): ?Model
     {
@@ -121,7 +121,7 @@ trait Queryable
      *
      * @param array $search
      * @return Collection
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function getAll(array $search = []): Collection
     {
@@ -133,7 +133,7 @@ trait Queryable
      *
      * @param array $search
      * @return LazyCollection
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function getAllCursor(array $search = []): LazyCollection
     {
@@ -143,7 +143,7 @@ trait Queryable
     /**
      * Get results count
      *
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function count(array $search = []): int
     {
@@ -156,7 +156,7 @@ trait Queryable
      * @param array $search
      * @param int $pageSize
      * @return LengthAwarePaginator
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function getAllPaginated(array $search = [], int $pageSize = 15): LengthAwarePaginator
     {
@@ -243,7 +243,7 @@ trait Queryable
      *
      * @param array $searchParams
      * @return Builder
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     protected function applyFilters(array $searchParams = []): Builder
     {
@@ -261,7 +261,7 @@ trait Queryable
      *
      * @param array $conditions
      * @return Builder
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     protected function applyFilterConditions(array $conditions): Builder
     {
@@ -450,24 +450,24 @@ trait Queryable
     /**
      * Validate array data
      *
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     private function validateArrayData($data): void
     {
         if (!is_array($data)) {
-            throw new ExceptionRepository("Invalid data provided, data must be an array.");
+            throw new RepositoryException("Invalid data provided, data must be an array.");
         }
     }
 
     /**
      * Validate closure data
      *
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     private function validateClosureFunction($value): void
     {
         if (!$value instanceof Closure && !is_null($value)) {
-            throw new ExceptionRepository("Invalid closure provided.");
+            throw new RepositoryException("Invalid closure provided.");
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Repositories\Eloquent\Exceptions\ExceptionRepository;
+use App\Exceptions\RepositoryException;
 use Illuminate\Database\Eloquent\Model;
 
 trait CrudAble
@@ -46,7 +46,7 @@ trait CrudAble
      * @param Model|mixed $keyOrModel
      * @param array $data
      * @return Model|null
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function update($keyOrModel, array $data): ?Model
     {
@@ -98,7 +98,7 @@ trait CrudAble
      *
      * @param $keyOrModel
      * @return void
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      * @throws Exception
      */
     public function softDelete($keyOrModel): void
@@ -115,7 +115,7 @@ trait CrudAble
             return;
         }
 
-        throw new ExceptionRepository('Model does not support soft deletes.');
+        throw new RepositoryException('Model does not support soft deletes.');
     }
 
     /**
@@ -123,7 +123,7 @@ trait CrudAble
      *
      * @param $keyOrModel
      * @return void
-     * @throws ExceptionRepository
+     * @throws RepositoryException
      */
     public function restore($keyOrModel): void
     {
@@ -131,7 +131,7 @@ trait CrudAble
         $model = $this->resolveModel($keyOrModel);
 
         if ($model->{$this->deletedAtColumnName} === null) {
-            throw new ExceptionRepository('Model is not deleted so could not be restored');
+            throw new RepositoryException('Model is not deleted so could not be restored');
         }
 
         if ($this->isInstanceOfSoftDeletes($model)) {
@@ -144,6 +144,6 @@ trait CrudAble
             return;
         }
 
-        throw new ExceptionRepository('Model does not support soft deletes.');
+        throw new RepositoryException('Model does not support soft deletes.');
     }
 }
